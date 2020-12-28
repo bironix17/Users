@@ -15,9 +15,13 @@ class ListUsers extends StatefulWidget {
 
 class _ListUsersState extends State<ListUsers> {
   String _login;
+
+  /// Это не имеет смысла и достаточно опасно. Лучше обращаться к данным через
+  /// BlocProvider.
   ListUsersBloc _listUsersBloc;
 
   _ListUsersState() {
+    /// Это стоит вынести в BLoC
     _login = Hive.box('login').get('login');
   }
 
@@ -57,6 +61,7 @@ class _ListUsersState extends State<ListUsers> {
     _listUsersBloc.add(SearchUsersEvent(str));
   }
 
+  /// Нет дефолтного значения, метод может ничего не вернуть
   Container _listViewOrOthers(ListUsersState state) {
 
     if (state is LoadingState)
@@ -91,6 +96,8 @@ class _ListUsersState extends State<ListUsers> {
       Future.microtask(() => Navigator.pop(context));
   }
 
+  /// Здесь не обязательно ничего возвращать т.к. это void. Можно было просто
+  /// добавить async к функции.
   Future<void> _handleRefresh() {
     _listUsersBloc.add(UpdateUsersEvent());
     return null;

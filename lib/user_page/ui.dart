@@ -7,6 +7,10 @@ import '../list_users/ui.dart';
 class UserPage extends StatelessWidget {
   User user;
 
+  /// В конструктор экранов лучше ничего не передавать, особенно когда ты
+  /// используешь bloc.
+  ///
+  /// Т.е. значение лучше вытягивать напрямую из блока.
   UserPage({Key key, this.user}) : super(key: key);
 
   @override
