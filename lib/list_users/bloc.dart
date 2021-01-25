@@ -4,11 +4,17 @@ import 'package:users/data/repository.dart';
 import 'package:users/data/user.dart';
 
 class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
+  /// В твоем случае маленького приложения это, конечно, сойдет. Но лучше всего
+  /// делать репозиторий абстрактным и передавать в BLoC в качестве конструктора.
   Repository _repository = Repository();
+
+  /// Необязательно в BLoC хранить какие-то значения в полях. Значение всегда
+  /// у тебя хранится в поле [state].
   String _login;
   List<User> _users;
 
   ListUsersBloc() : super(null) {
+    /// Вот здесь бы и пригодился storage.
     var box = Hive.box('Login');
     _login = box.get('login', defaultValue: null);
     add(UpdateUsersEvent());
@@ -43,6 +49,7 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
   }
 
   List<User> searchUserByName(String name) {
+    /// Это можно было сделать через метод [map].
     List<User> subUsers = List<User>();
     _users.forEach((element) {
       if (element.fullName.toLowerCase().contains(name.toLowerCase()))

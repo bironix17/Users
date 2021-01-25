@@ -17,6 +17,8 @@ class _AuthorizationState extends State<Authorization> {
       create: (context) => AuthBloc(),
       child: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
         if (state is AuthorizedState) {
+
+          /// Здесь нет смысла использовать микротаск
           Future.microtask(() => Navigator.push(
               context, MaterialPageRoute(builder: (context) => ListUsers())));
         }
@@ -37,11 +39,13 @@ class _AuthorizationState extends State<Authorization> {
                   maxLength: 15,
                   autovalidate: true,
                   validator: (String s) {
+                    // Лучше не использовать состояния из двух разных источников
+                    // Валидатор можно вынести в bloc и там проверять значения.
                     if (state is InputErrorState) return "Введите логин";
                     return null;
                   },
                 ),
-                width: 300,
+                width: 300, // Лучше такие вещи задавать паддингами, тогда у тебя точно ничего не уедет за пределы экрана
               ),
               Container(
                   padding: EdgeInsets.only(top: 30),
